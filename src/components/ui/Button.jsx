@@ -1,15 +1,10 @@
-export default function Button({ children, onClick, variant = "primary" }) {
-  const base =
-    "rounded-xl px-4 py-3 font-medium transition";
-
+export default function Button({ children, variant = "primary", type = "button", className = "", ...props }) {
   const styles = {
-    primary: "bg-blue-600 hover:bg-blue-500",
+    primary: "bg-violet-600 hover:bg-violet-500",
     secondary: "bg-white/10 hover:bg-white/20 border border-white/10",
   };
-
-  return (
-    <button onClick={onClick} className={`${base} ${styles[variant]}`}>
-      {children}
-    </button>
-  );
+  return <button {...props} type={type}
+    className={`rounded-xl px-4 py-3 font-medium transition disabled:opacity-60 disabled:cursor-not-allowed ${styles[variant] || styles.primary} ${className}`}>
+    {children}
+  </button>;
 }

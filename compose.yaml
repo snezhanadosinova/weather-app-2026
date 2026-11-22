@@ -1,0 +1,9 @@
+services:
+  weather-app:
+    build:
+      context: .
+      args:
+        VITE_WEATHER_API_KEY: ${VITE_WEATHER_API_KEY:?Set VITE_WEATHER_API_KEY in .env or your shell}
+    ports:
+      - "8080:80"
+    restart: unless-stopped

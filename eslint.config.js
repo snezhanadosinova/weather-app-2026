@@ -17,5 +17,13 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    rules: {
+      // JSX component references are not counted by the core unused-variable rule.
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z]' }],
+    },
+  },
+  {
+    files: ['tests/**/*.js'],
+    languageOptions: { globals: globals.node },
   },
 ])

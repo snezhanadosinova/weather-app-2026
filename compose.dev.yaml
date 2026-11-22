@@ -1,0 +1,16 @@
+services:
+  weather-app:
+    build:
+      context: .
+      target: development
+    ports:
+      - "127.0.0.1:8080:5173"
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "300"
+    volumes:
+      - .:/app
+      - weather_node_dependencies:/app/node_modules
+
+volumes:
+  weather_node_dependencies:

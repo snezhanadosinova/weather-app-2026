@@ -1,7 +1,5 @@
-export default function Loader() {
-  return (
-    <div className="text-center text-gray-300 animate-pulse">
-      Loading weather...
-    </div>
-  );
+export default function Loader({ loading, message, completedMessage = "" }) {
+  return <p role="status" aria-atomic="true" className={loading ? "text-center text-slate-200" : "sr-only"}>
+    {loading ? message : completedMessage}
+  </p>;
 }

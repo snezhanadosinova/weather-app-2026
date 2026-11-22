@@ -1,0 +1,14 @@
+{
+  "name": "Weather App Development",
+  "dockerComposeFile": "../compose.dev.yaml",
+  "service": "weather-app",
+  "workspaceFolder": "/app",
+  "remoteUser": "node",
+  "shutdownAction": "stopCompose",
+  "overrideCommand": false,
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint"]
+    }
+  }
+}

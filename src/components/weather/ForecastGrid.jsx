@@ -1,13 +1,13 @@
-import ForecastCard from "./ForecastCard";
+import ForecastCard from "./ForecastCard.jsx";
+import { buildDailyForecast } from "../../utils/forecast.js";
 
-export default function ForecastGrid({ forecast }) {
-  const daily = forecast.list.filter((_, i) => i % 8 === 0).slice(0, 5);
-
-  return (
-    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-6">
-      {daily.map((day, i) => (
-        <ForecastCard key={i} day={day} />
-      ))}
-    </div>
-  );
+export default function ForecastGrid({ forecast, units }) {
+  const daily = buildDailyForecast(forecast);
+  return <section aria-labelledby="forecast-heading">
+    <h3 id="forecast-heading" className="mb-3 text-sm font-semibold text-gray-300">Next days</h3>
+    <p className="sr-only">Temperature and conditions near local noon. Ranges cover available intervals; boundary days may be partial.</p>
+    <ul className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+      {daily.map(day => <li key={day.date}><ForecastCard day={day} units={units} /></li>)}
+    </ul>
+  </section>;
 }

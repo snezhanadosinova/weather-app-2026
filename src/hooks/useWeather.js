@@ -1,41 +1,22 @@
-import { useState } from "react";
-import {
-  getWeatherByCity,
-  getForecastByCity,
-} from "../services/weatherApi";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { createWeatherApi } from "../services/weatherApi.js";
+import { getCurrentLocation } from "../services/geolocation.js";
+import { createWeatherStore } from "../services/weatherStore.js";
 
-export const useWeather = () => {
-  const [weather, setWeather] = useState(null);
-  const [forecast, setForecast] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const fetchWeather = async (city, units) => {
-    try {
-      setLoading(true);
-      setError("");
-
-      const w = await getWeatherByCity(city, units);
-      const f = await getForecastByCity(city, units);
-
-      setWeather(w);
-      setForecast(f);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return {
-    weather,
-    forecast,
-    loading,
-    error,
-    fetchWeather,
-    setWeather,
-    setForecast,
-    setLoading,
-    setError,
-  };
-};
+export function useWeather() {
+  const [store] = useState(() => createWeatherStore(createWeatherApi(), getCurrentLocation));
+  const state = useSyncExternalStore(store.subscribe, store.getSnapshot);
+  useEffect(() => {
+    const refresh = () => {
+      if (document.visibilityState === "visible") store.refresh();
+    };
+    const timer = setInterval(refresh, 30 * 1000);
+    document.addEventListener("visibilitychange", refresh);
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", refresh);
+      store.cancel();
+    };
+  }, [store]);
+  return { ...state, searchCity: store.searchCity, searchLocation: store.searchLocation, changeUnits: store.changeUnits };
+}
